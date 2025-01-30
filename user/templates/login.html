@@ -1,0 +1,142 @@
+<!--<!DOCTYPE html>-->
+<!--{% load static %}-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Login</title>-->
+<!--    <link rel="stylesheet" href="{% static 'style.css' %}">-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div id="container" class="container sign-in">-->
+<!--        <div class="row">-->
+<!--            -->
+
+<!--            &lt;!&ndash; Login Form (Right) &ndash;&gt;-->
+<!--            <div class="col align-items-center sign-in">-->
+<!--                <div class="form-wrapper">-->
+<!--                    <form class="form sign-in" method="POST">-->
+<!--                        {% csrf_token %}-->
+<!--                        <div class="input-group">-->
+<!--                            <i class='bx bxs-user'></i>-->
+<!--                            <input type="text" name="username" placeholder="Username" required>-->
+<!--                        </div>-->
+<!--                        <div class="input-group">-->
+<!--                            <i class='bx bxs-lock-alt'></i>-->
+<!--                            <input type="password" name="password" placeholder="Password" required>-->
+<!--                        </div>-->
+<!--                        <button type="submit">Sign in</button>-->
+<!--                        <p><b>Forgot password?</b></p>-->
+<!--                        <p>-->
+<!--                            <span>Don't have an account?</span>-->
+<!--                            <b onclick="toggle()" class="pointer"><a href="{% url 'signup' %}">Sign up here</a></b>-->
+<!--                        </p>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <script src="{% static 'script.js' %}"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 70px;
+            padding: 20px;
+            background-image: url('https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTExL3Jhd3BpeGVsb2ZmaWNlMV9taW5pbWFsXzNkX3JlbmRlcl9vZl9ibHVycmVkX3BvbHlfcGxleHVzX2Rlc2lnbl9kY2I5NTAwNS01ZTM2LTQ1MjAtYThlZi1mNWRmZTgwZjA3ZjRfMS5qcGc.jpg'); /* Use the uploaded image */
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+        .container {
+            width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7); /* Dark overlay for contrast */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        h2 {
+            color: #fff;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input {
+            width: 90%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+        input[type="email"], input[type="password"] {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        button {
+            width: 90%;
+            padding: 10px;
+            font-size: 1em;
+            background: linear-gradient(to right, #32be8f, #38d39f);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s ease-in-out;
+        }
+        button:hover {
+            background: linear-gradient(to right, #38d39f, #32be8f);
+        }
+        p {
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        p a {
+            color: #38d39f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        p a:hover {
+            text-decoration: underline;
+        }
+        .error {
+            color: #ff6b6b;
+            font-size: 0.9em;
+            margin: 10px 0;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        {% if error %}<p class="error">{{ error }}</p>{% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="/">Signup</a></p>
+    </div>
+</body>
+</html>
