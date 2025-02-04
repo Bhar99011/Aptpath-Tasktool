@@ -1,0 +1,43 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>User Authentication</title>
+<link rel="stylesheet" href='{%static "/css/authenticaton.css"%}' >
+    
+</head>
+<body>
+{% block content%}
+    <div class="container" id="login-form">
+    {%for message in messages%}
+<div class="alert {{ message.tags }}">
+    {{ message }}
+</div>
+{%endfor%}
+
+        <h2>Login</h2>
+        <form method="POST">{%csrf_token%}   
+            <div class="form-group">
+                <label for="login-user name">User Name</label>
+                <input type="text" id="login-user name" placeholder="Enter your user name" name="user_name" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" placeholder="Enter your password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div class="switch-form">
+            Don't have an account? <a href="/signup">Sign up</a>
+        </div>
+    </div>
+
+{%endblock content%}
+    
+
+</body>
+</html>

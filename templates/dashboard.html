@@ -1,0 +1,207 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+
+</head>
+
+<body>
+
+   
+    <div class="navbar">
+        <div>
+        <h1>Welcome, {{ user_name }}!</h1>
+        <!-- <p>Your Role was   {{role}} !</p> -->
+        </div>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <div class="messagedisplay" id="signup-form">
+        <!-- Display messages -->
+        {% for message in messages %}
+        <div class="alert {{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% block content%}
+
+
+
+
+        
+
+    <div class="container mt-10" style="padding: 20px;">
+        <h1 class="dashboard-title">User Dashboard</h1>
+        <hr>
+
+
+        <span style="text-align: center; color: #333;
+        font-size: 28px;
+        font-weight: bold;
+        font-family: Georgia, 'Times New Roman', Times, serif;">
+        <h3>Tasks</h3>
+        </span><hr>
+        <!-- Task List (Card-Based) -->
+        <div class="task-container">
+           
+            {% if tasks %}
+                {% for task in tasks %}
+                    <div class="task-card">
+                        <div class="task-title"><strong style="color: #081962;">Title:</strong>{{ task.title }}</div>
+                        <div class="task-info"><strong>ID:</strong> {{ task.id }}</div>
+                        <div class="task-info" ><strong>Description:</strong> <p style="width: auto; height: 100px; padding: 5px; overflow: auto; scrollbar-width: auto; ">{{ task.description }}</p></div>
+                        <div class="task-info"><strong>Assigned To:</strong> {{ task.assigned_to }}</div>
+                        <div class="task-info"><strong>Assigned By:</strong> {{ task.assigned_by.user_name }}</div>
+                        <div class="task-footer">
+                            <span class="task-date">Created At: {{ task.created_at }}</span>
+                        </div><br>
+                        <center><div class="task-info"> 
+                        <button style="background-color:#054d12;">Answer</button>                      
+                        </div>
+                    </center>
+
+                    </div>
+                {% empty %}
+                    <p class="text-center">No tasks available.</p>
+                {% endfor %}<br>
+                {% include "tasks_paginator.html" %}
+            {% else %}
+                <p class="text-center">No tasks available.</p>
+            {% endif %}
+        </div>
+
+        
+
+<!-- Task Form -->
+<div class="form-container">
+    <h3>Create Task</h3>
+    <form method="POST" >
+        {% csrf_token %}
+        <input type="hidden" name="select" value="create_task">
+        
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Enter task title" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" placeholder="Enter task description" rows="4" required></textarea>
+        </div>
+        
+        <div class="mb-3">
+            <label for="assigned_to" class="form-label">Assign To</label>
+            <select class="form-select" id="assigned_to" name="assigned_to" required>
+                <option value="" selected disabled>Select user</option>
+                {% for user in users %}
+                    <option value="{{ user.user_name }}">{{ user.user_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary w-100">Create Task</button>
+    </form>
+</div>
+
+<!-- old dashboard -->
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Task Form -->
+        <!-- <div class="card mb-3">
+            <div class="card-header">
+                <h3>Create Task</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" >
+                    {% csrf_token %}
+                    <input type="hidden" name="select" value="create_task">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter task title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" placeholder="Enter task description" rows="4" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="assigned_to" class="form-label">Assign To</label>
+                        <select class="form-select" id="assigned_to" name="assigned_to" required>
+                            <option value="" selected disabled>Select user</option>
+                            {% for user in users %}
+                                <option value="{{ user.user_name }}">{{ user.user_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Task</button>
+                </form>
+            </div>
+        </div> -->
+
+        <!-- Task List -->
+        <!-- <div class="card">
+            <div class="card-header">
+                <h3>Task List</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Assigned To</th>
+                            <th>Assigned By</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if tasks %}
+                        {% for task in tasks %}
+                            <tr class="table-row">
+                                <td>{{ task.id }}</td>
+                                <td>{{ task.title }}</td>
+                                <td>{{ task.description }}</td>
+                                <td>{{ task.assigned_to}}</td>
+                                <td>{{ task.assigned_by.user_name }}</td>
+                                <td>{{ task.created_at }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No tasks available.</td>
+                            </tr>
+                        {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center">No tasks available.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+ -->
+
+                {% endblock content%}
+
+            </body>
+            </html>
+           

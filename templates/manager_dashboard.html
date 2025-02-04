@@ -1,0 +1,116 @@
+{% extends "dashboard.html" %}
+{% load static %}
+
+
+{%block content%}
+<h1 class="dashboard-title">Manager Dashboard</h1>
+
+<div class="statistics-container">
+    <div class="stat-item">
+        <h3>Total Users</h3>
+        <p>{{ user_count }}</p>
+    </div>
+
+    <div class="stat-item">
+        <h3>Total Tasks</h3>
+        <p>{{ task_count }}</p>
+    </div>
+</div>
+
+
+
+<div class="admin-container">
+    
+    <!-- User Details Section -->
+    <div class="admin-section">
+        <h2>User Details</h2>
+        <table class="admin-user-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    
+                    <th>Actions</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through user data dynamically in Django -->
+                {% for user in user_info %}                
+                <tr class="table-row">
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.user_name }}</td>
+                    <td>{{ user.email }}</td>
+                    
+                    
+                    <td>
+                        <div class="admin-action-buttons">
+                            <!-- <form action="{% url 'user_edit' user.id %}">
+                                
+                                
+                                <button type="submit">Edit </button>
+                            </form> -->
+
+
+
+                            <!-- Edit link that activates the CSS popup -->
+                        <a href="#popup{{ user.id }}" class="edit-button">Edit</a>
+                    
+                            {% include "edit_user.html" %}                           
+
+
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% include "user_paginator.html" %}
+
+
+
+
+<div class="admin-section">
+    <h3>Tasks Management</h3>
+    <div class="admin-action-buttons" style="margin-bottom: 15px;">
+       
+       <form method="POST" action="{% url 'tasks' user_id %}">
+           {% csrf_token %}
+           
+           <input type="submit" value=" Go To Tasks " class="task-button">
+
+       </form>
+       </div>
+   </div>
+
+
+
+<!-- Create User Section -->
+<div class="admin-section">
+   
+    <h2>Create User</h2>
+    <!-- {% for message in messages %}
+    <div class="alert {{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %} -->
+    <form method="POST" action="{% url 'create_user' %}">
+        {% csrf_token %}
+        <label for="user_name">Username:</label><br>
+        <input type="text" id="user_name" name="user_name" required><br><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        <label for="password">Confirm Password:</label><br>
+        <input type="password" id="password" name="confirm_password" required><br><br>
+        <button type="submit">Create User</button>
+    </form>
+</div>
+
+
+
+
+{% endblock content%}

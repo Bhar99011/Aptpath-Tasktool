@@ -1,0 +1,221 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px; /* Added padding for the body */
+            background-color: #f4f4f4;
+        }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert.error {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+        .alert.success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+
+        .container {
+            max-width: auto; /* Set a max-width for the container */
+            margin: 0 auto; /* Center the container */
+        }
+
+        .card {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .table th, .table td {
+            padding: 12px; /* Adjust padding inside table cells */
+        }
+        
+        .tasktable_row:hover{
+            background-color: hsl(147, 91%, 43%);
+           
+
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #1d1dcf;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #161ef5;
+        }
+        .delete_button{
+            padding: 10px 20px;
+            background-color: #f11219;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .delete_button:hover{
+            background-color: rgb(250, 76, 76);
+        }
+        .mb-1 {
+            margin-bottom: 10px; /* Adjusted margin for cards */
+        }
+
+        .mb-3 {
+            margin-bottom: 15px; /* Adjusted margin for form inputs */
+        }
+
+        .dashboard-title{
+    text-align: center; padding: 15px 20px; border-radius: 8px; border-color: black; box-shadow: #f0dee0; background-color:#f8f9fa; color: #333;  font-size: 28px;
+font-weight: bold;
+box-shadow: 0 4px 6px rgba(30, 27, 244, 0.1); /* Soft shadow */
+border: 2px solid #222223; /* Red border */
+
+margin: 20px auto;
+
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="container mt-10">
+        <h1 class="dashboard-title">Task Management</h1>
+        <hr>
+
+        <!-- Task Form -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3>Create Task</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'tasks' user_id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="select" value="create_task">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter task title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" placeholder="Enter task description" rows="4" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="assigned_to" class="form-label">Assign To</label>
+                        <select class="form-select" id="assigned_to" name="assigned_to" required>
+                            <option value="" selected disabled>Select user</option>
+                            {% for user in users %}
+                                <option value="{{ user.user_name }}">{{ user.user_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Task</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Task List -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Task List</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Assigned To</th>
+                            <th>Assigned By</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <!-- <h1 class="tasktable_row">hdsud</h1> -->
+                        {% if tasks %}
+                        {% for task in tasks %}
+                            <tr class="tasktable_row">
+                                <td>{{ task.id }}</td>
+                                <td>{{ task.title }}</td>
+                                <td>{{ task.description }}</td>
+                                <td>{{ task.assigned_to}}</td>
+                                <td>{{ task.assigned_by.user_name }}</td>
+                                <td>{{ task.created_at }}</td>
+                            </tr >
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No tasks available.</td>
+                            </tr>
+                        {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center">No tasks available.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% include "tasks_paginator.html" %}
+
+
+
+
+<!-- <div class="admin-section">
+    
+    <div class="admin-action-buttons" style="margin-bottom: 15px;">
+       
+       <form method="POST" action="{% url dashboard_url user_id %}">
+        {{role}}
+           {% csrf_token %}
+           
+           <input type="submit" value=" Go To Dashboard " class="task-button">
+
+       </form>
+       </div>
+   </div> -->
+
+   <div class="container mt-3 text-center">
+<a href="{% url dashboard_url user_id %}" class="btn btn-dark">Go to Dashboard</a>
+</div>
+
+
+
+
+
+</html>
+{% endblock content %}

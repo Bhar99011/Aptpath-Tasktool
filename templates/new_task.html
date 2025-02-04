@@ -1,0 +1,196 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .dashboard-title {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            color: #333;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(30, 27, 244, 0.1);
+            border: 2px solid #222223;
+            margin: 20px auto;
+        }
+
+        .task-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .task-card {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            border-left: 5px solid #1d1dcf;
+        }
+
+        .task-card:hover {
+            transform: scale(1.02);
+        }
+
+        .task-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1d1dcf;
+        }
+
+        .task-info {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .task-date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .btn-dashboard {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #1d1dcf;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .btn-dashboard:hover {
+            background-color: #161ef5;
+        }
+
+        /* Task Form Styling */
+        .form-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="dashboard-title">Task Management</h1>
+
+        
+        <!-- Task List (Card-Based) -->
+        <div class="task-container">
+            {% if tasks %}
+                {% for task in tasks %}
+                    <div class="task-card">
+                        <div class="task-title"><strong style="color: #081962;">Title:</strong>{{ task.title }}</div>
+                        <div class="task-info"><strong>ID:</strong> {{ task.id }}</div>
+                        <div class="task-info" ><strong>Description:</strong> <p style="width: auto; height: 100px; padding: 5px; overflow: auto; scrollbar-width: auto; ">{{ task.description }}</p></div>
+                        <div class="task-info"><strong>Assigned To:</strong> {{ task.assigned_to }}</div>
+                        <div class="task-info"><strong>Assigned By:</strong> {{ task.assigned_by.user_name }}</div>
+                        <div class="task-footer">
+                            <span class="task-date">Created At: {{ task.created_at }}</span>
+                        </div><br>
+                        <div class="task-info"> 
+                            <form method="POST" action="{% url 'task_action' task.id %}">
+                                {% csrf_token %}
+                                <button type="submit" name="select" value="edit_task">Edit</button>
+                            
+                                <button type="submit" class="delete_button" name="select" value="delete_task">Delete</button>
+                            </form>
+                        </div>
+                        
+
+                    </div>
+                {% empty %}
+                    <p class="text-center">No tasks available.</p>
+                {% endfor %}
+                {% include "tasks_paginator.html" %}
+            {% else %}
+                <p class="text-center">No tasks available.</p>
+            {% endif %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url dashboard_url user_id %}" class="btn-dashboard">Go to Dashboard</a>
+        </div>
+    </div>
+
+<!-- Task Form -->
+<div class="form-container">
+    <h3>Create Task</h3>
+    <form method="POST" action="{% url 'tasks' user_id %}">
+        {% csrf_token %}
+        <input type="hidden" name="select" value="create_task">
+        
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Enter task title" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" placeholder="Enter task description" rows="4" required></textarea>
+        </div>
+        
+        <div class="mb-3">
+            <label for="assigned_to" class="form-label">Assign To</label>
+            <select class="form-select" id="assigned_to" name="assigned_to" required>
+                <option value="" selected disabled>Select user</option>
+                {% for user in users %}
+                    <option value="{{ user.user_name }}">{{ user.user_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary w-100">Create Task</button>
+    </form>
+</div>
+
+
+
+        
+
+</body>
+</html>
+{% endblock content %}

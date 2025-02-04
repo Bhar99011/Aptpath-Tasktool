@@ -1,0 +1,351 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+.navbar {
+    background-color: #007bff;
+    padding: 10px 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: auto;
+}
+.navbar h1 {
+    margin: 0;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin-right: 1rem;
+}
+.navbar a:hover {
+    background-color: white;
+    color: #007bff;
+}
+.dashboard-container {
+    padding: 20px;
+}
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+.alert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.alert.error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+.alert.success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+button {
+    padding: 10px 20px;
+    background-color: #1d1dcf;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #161ef5;
+}
+
+.edit-button {
+        padding: 10px 20px;
+        background-color: #1d1dcf;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .edit-button:hover {
+        background-color: #161ef5;
+    }
+
+/* admin-css code */
+
+.admin-container {
+    padding: 20px;
+}
+.admin-section {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+.admin-section h2 {
+    margin: 0 0 20px 0;
+    font-size: 20px;
+}
+.admin-user-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.admin-user-table th, .admin-user-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+.admin-user-table th {
+    background-color: #007bff;
+    color: white;
+}
+button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #218838;
+}
+.admin-action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+
+
+/* use tasks css */
+.tasks-container {
+    max-width: 800px; /* Set a max-width for the container */
+    margin: 0 auto; /* Center the container */
+}
+
+.task-card {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tasks-card-header {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+.table th, .table td {
+    padding: 12px; /* Adjust padding inside table cells */
+}
+.table-row:hover{
+    background-color: hsl(240, 13%, 95%);
+   
+
+}
+button {
+    padding: 10px 20px;
+    background-color: #1d1dcf;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #161ef5;
+}
+.delete_button{
+    padding: 10px 20px;
+    background-color: #f11219;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.delete_button:hover{
+    background-color: rgb(250, 76, 76);
+}
+
+.mb-1 {
+    margin-bottom: 10px; /* Adjusted margin for cards */
+}
+
+.mb-3 {
+    margin-bottom: 15px; /* Adjusted margin for form inputs */
+}
+.dashboard-title{
+text-align: center; padding: 15px 20px; border-radius: 8px; border-color: black; box-shadow: #f0dee0; background-color:#f8f9fa; color: #333;  font-size: 28px;
+font-weight: bold;
+box-shadow: 0 4px 6px rgba(30, 27, 244, 0.1); /* Soft shadow */
+border: 2px solid #222223; /* Red border */
+
+margin: 20px auto;
+
+}
+
+.task-button{
+background-color: #14d484;padding: 10px 20px; border: black;
+   border-radius: 10px;
+   font-size: 20px;
+   cursor: pointer;
+   pointer-events: stroke;
+   color: white;
+}
+.task-button:hover{
+background-color: #620be6;
+padding: 20px 30px;
+text-align: center;
+}
+
+
+
+
+/* 
+newdashboard */
+
+
+.dashboard-title {
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    color: #333;
+    font-size: 28px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(30, 27, 244, 0.1);
+    border: 2px solid #222223;
+    margin: 20px auto;
+}
+
+.task-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.task-card {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    border-left: 5px solid #1d1dcf;
+}
+
+.task-card:hover {
+    transform: scale(1.02);
+}
+
+.task-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #1d1dcf;
+}
+
+.task-info {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.task-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.task-date {
+    font-size: 12px;
+    color: #999;
+}
+
+.btn-dashboard {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #1d1dcf;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.btn-dashboard:hover {
+    background-color: #161ef5;
+}
+
+/* Task Form Styling */
+.form-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+
+
+/* Stats Container */
+.statistics-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+/* Individual Stat Item */
+.stat-item {
+    background-color: hsl(156, 93%, 70%);
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 200px;
+    font-size: 24px;
+}
+
+/* Stat Title */
+.stat-item h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* Stat Value */
+.stat-item p {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+}
