@@ -365,19 +365,61 @@ def tasks(request,user_id):
     
     return render(request,"new_task.html",context)   
 
-def task_action(request,task_id):
-    
+def task_action(request, task_id):
+    l=Tasks.objects.get(id=task_id)
+    print(l)
     session_user_id = request.session.get("user_id")
+    
     if request.method == 'POST':
-        select=request.POST.get("select")
+        select = request.POST.get("select")
+        print(select)
+        
         if select == "edit_task":
-            messages.error(request,"This feature coming soon ... ")
+            title = request.POST.get("title")
+            description = request.POST.get("description")
+            assigned_to_user = request.POST.get("assigned_to")
+
+            # Handle missing user gracefully
+            try:
+                assigned_to = users_details.objects.get(user_name=assigned_to_user)
+                
+            except users_details.DoesNotExist:
+                messages.error(request, "Assigned user not found.")
+                return redirect("tasks", session_user_id)
+
+            task = get_object_or_404(Tasks, id=task_id)
+            task.title = title
+            task.description = description
+            print("before assigned to ",task.assigned_to)
+            task.assigned_to = assigned_to
+            print('after',task.assigned_to)
+            task.save()
+            messages.success(request, "Task updated successfully!")
 
         elif select == "delete_task":
-            task_delete=Tasks.objects.get(id=task_id)
+            task_delete = get_object_or_404(Tasks, id=task_id)
+            task_title = task_delete.title  # Store before deleting
             task_delete.delete()
-            messages.success(request,f"task {task_delete.title} has been deleted sucessfully")
-            return redirect("tasks",session_user_id)
-    return redirect("tasks",session_user_id)
+            messages.success(request, f"Task '{task_title}' has been deleted successfully.")
+    
+    return redirect("tasks", session_user_id)
+       
+def submit_answer(request,task_id):
+    session_user_id=request.session.get("user_id")
+    session_user=get_object_or_404(users_details,id=session_user_id)
+    session_user_role=session_user.role
+    if request.method=="POST":
+        answer=request.POST.get("answer")
+        task=Tasks.objects.get(id=task_id)
+        task.answer=answer
+        task.save()
+        messages.success(request, "Your answer has been submitted successfully!")
+    if session_user_role=="user":
+        return redirect("dashboard",session_user_id)
+    else:
+        return redirect(f"tasks", session_user_id)
+    
+
+
 
        

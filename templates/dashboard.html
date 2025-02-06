@@ -63,18 +63,30 @@
                         <div class="task-footer">
                             <span class="task-date">Created At: {{ task.created_at }}</span>
                         </div><br>
-                        <center><div class="task-info"> 
-                        <button style="background-color:#054d12;">Answer</button>                      
-                        </div>
-                    </center>
+                 {% if not task.answer %}       
+                <!-- Answer Form -->
+                <form method="POST" action="{% url 'submit_answer' task.id %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="answer-{{ task.id }}" class="form-label"><strong>Submit Your Answer:</strong></label>
+                        <textarea class="form-control" id="answer-{{ task.id }}" name="answer" placeholder="Write your answer here..." required></textarea>
+                    </div>
+                    <button type="submit">Submit Task</button>
+                </form>
+                {% else %}
+                <h3>Task Already Submitted </h3>
+                {% endif %}
 
+
+
+                
                     </div>
                 {% empty %}
-                    <p class="text-center">No tasks available.</p>
+                    <!-- <p class="text-center">No tasks available.</p> -->
                 {% endfor %}<br>
                 {% include "tasks_paginator.html" %}
             {% else %}
-                <p class="text-center">No tasks available.</p>
+                <p class="text-center">No tasks are available.</p>
             {% endif %}
         </div>
 

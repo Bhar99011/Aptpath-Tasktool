@@ -17,6 +17,12 @@ class Tasks(models.Model):
     assigned_to=models.ForeignKey(users_details,on_delete=models.CASCADE, related_name="assigned_to")
     assigned_by=models.ForeignKey(users_details,on_delete=models.CASCADE, related_name="assigned_by")
     created_at=models.DateField(auto_now=True)
+    answer=models.TextField(null=True)
+
+    def __str__(self):
+        return self.title
+    
+
     # def save(self,*args, **kwargs):
     #     if not self.password.startswith('pbkdf2_'):
     #         self.password=make_password(self.password)

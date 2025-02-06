@@ -1,77 +1,16 @@
-<!-- <style>
-    /* Popup styles */
-    .popup {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 300px;
-        padding: 20px;
-        background: white;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-        border-radius: 8px;
-        z-index: 1000;
-    }
-    .popup-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-    }
-    .close-btn {
-        display: block;
-        margin: 10px auto 0;
-        padding: 5px 10px;
-        background: red;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-</style>
-
-<div class="popup-overlay" id="popupOverlay"></div>
-    <div class="popup" id="popupBox">
-        <h2>Edit user details </h2>
-        <form method="POST" action="{% url 'user_edit' user.id%}">
-            {% csrf_token %}
-            <label for="user_name">Username:</label><br>
-            <input type="text" id="user_name" name="user_name" value="{{user.user_name}}" readonly><br><br>
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" value="{{user.email}}" required><br><br>            
-            <button type="submit">Submit</button>
-        </form>
-        
-        <button class="close-btn" onclick="closePopup()">Close</button>
-    </div>
-
-    <script>
-        function showPopup(id, username, email) {
-            document.getElementById("popupBox").style.display = "block";
-            document.getElementById("popupOverlay").style.display = "block";
-        }
-        function closePopup() {
-            document.getElementById("popupBox").style.display = "none";
-            document.getElementById("popupOverlay").style.display = "none";
-        }
-    </script> -->
 
 
 
 
-    {% for user in user_info %}
+
+   
 <div id="popup{{ user.id }}" class="popup">
     <div class="popup-content">
         <h2>Edit User Details</h2>
         <form method="POST" action="{% url 'user_edit' user.id %}">
             {% csrf_token %}
-            <label for="user_name{{ user.id }}">Username:</label><br>
-            <input type="text" id="user_name{{ user.id }}" name="user_name" value="{{ user.user_name }}" readonly><br><br>
+            <label for="user_name">Username:</label><br>
+            <input type="text" id="user_name" name="user_name" value="{{ user.user_name }}" readonly><br><br>
             <label for="email{{ user.id }}">Email:</label><br>
             <input type="email" id="email{{ user.id }}" name="email" value="{{ user.email }}" required><br><br>
             <button type="submit">Submit</button>
@@ -80,7 +19,7 @@
         <a class="close-btn" href="#">Close</a>
     </div>
 </div>
-{% endfor %}
+
 
 <!-- CSS for the CSS-only popup -->
 <style>

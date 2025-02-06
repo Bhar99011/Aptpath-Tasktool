@@ -1,0 +1,88 @@
+
+<div id="popup{{ task.id }}" class="popup">
+    <div class="popup-content">
+    <h3>Edit Task</h3>
+    
+    <form method="POST" action="{% url 'task_action' task.id %}">
+        {% csrf_token %}    
+        <input type="hidden" name="select" value="edit_task">    
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{task.title}}" >
+        </div>
+        
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description"  rows="4" >{{ task.description }}</textarea>
+        </div>
+        
+        <div class="mb-3">
+            <label for="assigned_to" class="form-label">Assign To</label>
+            <select class="form-select" id="assigned_to" name="assigned_to" >
+                <option value="{{task.assigned_to}}" selected >{{task.assigned_to}}</option>
+                {% for user in users %}
+                    <option value="{{ user.user_name }}">{{ user.user_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary w-100">Update Task</button>
+    </form>
+</div>
+        <!-- "Close" link resets the URL fragment -->
+        <a class="close-btn" href="#">Close</a>
+   
+</div>
+
+
+<!-- CSS for the CSS-only popup -->
+<style>
+    /* Basic styling for the popup modal */
+  
+    .popup {
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.popup:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+    .popup-content {
+        position: relative;
+    }
+    .close-btn {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 5px 10px;
+        background: red;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    /* Optional: overlay styling */
+    .popup:target::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(24, 21, 247, 0.105);
+        z-index: -1;
+    }
+
+
+</style>

@@ -56,7 +56,7 @@ body {
 }
 button {
     padding: 10px 20px;
-    background-color: #1d1dcf;
+    background-color: hwb(240 14% 3%);
     color: white;
     border: none;
     border-radius: 5px;
@@ -64,20 +64,21 @@ button {
     cursor: pointer;
 }
 button:hover {
-    background-color: #161ef5;
+    background-color: hwb(238 38% 3%);
 }
 
 .edit-button {
-        padding: 10px 20px;
-        background-color: #1d1dcf;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
+    padding: 10px 28px;
+    background-color: #270dd1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
     }
+
     .edit-button:hover {
-        background-color: #161ef5;
+        background-color: hsl(238, 86%, 78%);
     }
 
 /* admin-css code */
@@ -109,7 +110,7 @@ button:hover {
     background-color: #007bff;
     color: white;
 }
-button {
+/* button {
     padding: 10px 20px;
     background-color: #28a745;
     color: white;
@@ -120,7 +121,7 @@ button {
 }
 button:hover {
     background-color: #218838;
-}
+} */
 .admin-action-buttons {
     display: flex;
     gap: 10px;
@@ -155,10 +156,8 @@ button:hover {
 }
 .table-row:hover{
     background-color: hsl(240, 13%, 95%);
-   
-
-}
-button {
+  }
+/* button {
     padding: 10px 20px;
     background-color: #1d1dcf;
     color: white;
@@ -169,7 +168,7 @@ button {
 }
 button:hover {
     background-color: #161ef5;
-}
+} */
 .delete_button{
     padding: 10px 20px;
     background-color: #f11219;
@@ -210,75 +209,10 @@ background-color: #14d484;padding: 10px 20px; border: black;
 }
 .task-button:hover{
 background-color: #620be6;
-padding: 20px 30px;
+padding: 15px 25px;
 text-align: center;
 }
 
-
-
-
-/* 
-newdashboard */
-
-
-.dashboard-title {
-    text-align: center;
-    padding: 15px;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-    color: #333;
-    font-size: 28px;
-    font-weight: bold;
-    box-shadow: 0 4px 6px rgba(30, 27, 244, 0.1);
-    border: 2px solid #222223;
-    margin: 20px auto;
-}
-
-.task-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-.task-card {
-    width: 100%;
-    max-width: 500px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-    border-left: 5px solid #1d1dcf;
-}
-
-.task-card:hover {
-    transform: scale(1.02);
-}
-
-.task-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #1d1dcf;
-}
-
-.task-info {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 5px;
-}
-
-.task-footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-}
-
-.task-date {
-    font-size: 12px;
-    color: #999;
-}
 
 .btn-dashboard {
     display: inline-block;
@@ -348,4 +282,74 @@ newdashboard */
     font-size: 32px;
     font-weight: bold;
     margin: 0;
+}
+/* 
+newdashboard */
+
+
+.dashboard-title {
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    color: #333;
+    font-size: 28px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(30, 27, 244, 0.1);
+    border: 2px solid #222223;
+    margin: 20px auto;
+}
+
+.task-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.task-card {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    border-left: 5px solid #1d1dcf;
+}
+
+/* .task-card:hover {
+    transform: scale(1.02);
+} */
+
+.task-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #1d1dcf;
+}
+
+.task-info {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.task-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.task-date {
+    font-size: 12px;
+    color: #999;
+}
+
+.task-action {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between buttons */
+    inline-size: 10px;
+    background-color: #14d484;
 }
