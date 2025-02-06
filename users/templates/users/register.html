@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url("{% static 'C:\Users\saipr\Desktop\UAM\newwebby\users\static\images\background_loginpage.png' %}") no-repeat center center fixed;
+            background-size: cover; /* Ensures the background image covers the whole page */
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #0056b3;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #004494;
+        }
+
+        .login-link {
+            margin-top: 15px;
+            display: block;
+            color: #0056b3;
+            text-decoration: none;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+
+        <!-- Display Django Messages -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p class="error">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Display form errors -->
+        {% for field in form %}
+            {% for error in field.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Enter username" value="{{ form.username.value|default_if_none:'' }}" required>
+            <input type="email" name="email" placeholder="Enter email address" value="{{ form.email.value|default_if_none:'' }}" required>
+            <input type="password" name="password" placeholder="Enter password" required>
+            <input type="password" name="confirm_password" placeholder="Confirm password" required>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <a href="{% url 'login' %}" class="login-link">Already have an account? Login here</a>
+    </div>
+</body>
+</html>

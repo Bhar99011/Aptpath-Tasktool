@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Dashboard</title>
+    <link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h3 {
+            text-align: center;
+            color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        .status-completed {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: red;
+            font-weight: bold;
+        }
+
+        .no-tasks {
+            text-align: center;
+            font-size: 18px;
+            color: #777;
+            margin-top: 20px;
+        }
+
+        /* Upload Form */
+        .upload-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .upload-form input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .upload-btn {
+            padding: 5px 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .upload-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Pagination Styles */
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination a, .pagination span {
+            padding: 8px 12px;
+            margin: 2px;
+            text-decoration: none;
+            background-color: #0056b3;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .pagination a:hover {
+            background-color: #004494;
+        }
+
+        .pagination .current {
+            background-color: gray;
+            color: white;
+            font-weight: bold;
+            cursor: default;
+        }
+
+        /* Floating Logout Button */
+        .logout-btn {
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .logout-btn:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Logout Button -->
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+
+    <div class="container">
+        <h1>Executive Dashboard</h1>
+        <h3>Your Assigned Tasks</h3>
+
+        {% if tasks %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task Title</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Due Date</th>
+                        <th>Assigned By</th>
+                        <th>Upload Submission</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.description }}</td>
+                        <td>
+                            {% if task.completed %}
+                                <span class="status-completed">Completed</span>
+                            {% else %}
+                                <span class="status-pending">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ task.due_date|date:"Y-m-d" }}</td>
+                        <td>
+                            {% if task.assigned_by %}
+                                {{ task.assigned_by.username }}
+                            {% else %}
+                                <span style="color: gray;">Unassigned</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not task.completed %}
+                                <form class="upload-form" method="POST" enctype="multipart/form-data" action="{% url 'submit_task' task.id %}">
+                                    {% csrf_token %}
+                                    <input type="file" name="upload_file" required>
+                                    <button type="submit" class="upload-btn">Submit</button>
+                                </form>
+                            {% else %}
+                                <span class="status-completed">Submitted</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination Controls -->
+            {% if tasks.paginator.num_pages > 1 %}
+                <div class="pagination">
+                    {% if tasks.has_previous %}
+                        <a href="?page=1">&laquo; First</a>
+                        <a href="?page={{ tasks.previous_page_number }}">Previous</a>
+                    {% endif %}
+
+                    <span class="current">Page {{ tasks.number }} of {{ tasks.paginator.num_pages }}</span>
+
+                    {% if tasks.has_next %}
+                        <a href="?page={{ tasks.next_page_number }}">Next</a>
+                        <a href="?page={{ tasks.paginator.num_pages }}">Last &raquo;</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+            
+        {% else %}
+            <p class="no-tasks">No tasks assigned yet. Please check back later!</p>
+        {% endif %}
+    </div>
+</body>
+</html>

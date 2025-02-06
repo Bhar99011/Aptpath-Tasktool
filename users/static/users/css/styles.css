@@ -1,0 +1,231 @@
+/* styles.css */
+
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f4f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url("{% static 'C:\Users\saipr\Desktop\UAM\newwebby\users\static\images\background_loginpage.png' %}") no-repeat center center fixed;
+    background-size: cover; /* Ensures the background image covers the whole page */
+    color: #333;
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(100px);
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Header */
+h2, h1 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Form Inputs */
+input[type="text"], input[type="email"], input[type="password"], select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: 0.3s ease;
+}
+
+/* Focus effect on inputs */
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, select:focus {
+    border-color: #0066cc;
+    outline: none;
+}
+
+/* Button */
+button {
+    width: auto;
+    padding: 12px 20px;
+    background-color: #0066cc;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #005bb5;
+    transform: scale(1.05);
+}
+
+/* Link styles */
+a {
+    text-decoration: none;
+    color: #0066cc;
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Animation for page loading */
+@keyframes fadeInUp {
+    0% {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #0066cc;
+    color: white;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+td a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+/* Container for errors */
+.errors ul {
+    color: red;
+    font-size: 14px;
+    padding: 10px;
+    border: 1px solid red;
+    background-color: #f9d6d6;
+    margin-bottom: 15px;
+}
+
+/* Success message */
+.success-message {
+    color: green;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Animation for button */
+@keyframes bounce {
+    0% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.1);
+    }
+    50% {
+        transform: scale(1);
+    }
+    75% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+button:hover {
+    background-color: #45a049;  /* Slightly darker green on hover */
+    transform: scale(1.05);  /* Slightly enlarges the button on hover */
+}
+
+/* Add padding to form */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Adjusting action column width */
+th.action-column {
+    width: 150px;
+}
+
+/* Success and Error Messages */
+.errors {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+/* Floating Logout Button */
+.logout-btn {
+    padding: 10px 20px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    position: fixed;  /* Fix the position */
+    top: 20px;        /* Position from the top of the page */
+    right: 20px;      /* Position from the right edge of the page */
+    z-index: 100;     /* Ensures it stays on top of other content */
+}
+
+.logout-btn:hover {
+    background-color: darkred; /* Hover effect */
+}
+
+
+
+.messages {
+    margin-bottom: 15px;
+}
+
+.success {
+    color: green;
+    font-weight: bold;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}

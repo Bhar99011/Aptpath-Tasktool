@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+    <link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        li strong {
+            font-size: 18px;
+        }
+
+        li span {
+            display: block;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .assign-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .assign-link:hover {
+            background-color: #005bb5;
+        }
+
+        .no-task {
+            text-align: center;
+            color: #777;
+            font-size: 18px;
+        }
+
+        .logout-btn {
+    padding: 10px 20px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    position: fixed;  /* Fix the position */
+    top: 20px;        /* Position from the top of the page */
+    right: 20px;      /* Position from the right edge of the page */
+    z-index: 100;     /* Ensures it stays on top of other content */
+}
+
+.logout-btn:hover {
+    background-color: darkred; /* Hover effect */
+}
+    </style>
+</head>
+<body>
+
+    <!-- Logout Button -->
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+
+    <div class="container">
+        <h2>Task List</h2>
+
+        {% if tasks %}
+            <ul>
+                {% for task in tasks %}
+                    <li>
+                        <strong>{{ task.title }}</strong><br>
+                        <span>Description: {{ task.description }}</span><br>
+                        <span>Assigned to: 
+                            {% if task.assigned_to %}
+                                {{ task.assigned_to.username }}
+                            {% else %}
+                                Unassigned
+                            {% endif %}
+                        </span><br>
+                        <span>Due Date: {{ task.due_date }}</span><br>
+                        <a href="{% url 'assign_task' user_id=task.assigned_to.id %}" class="assign-link">Reassign Task</a> <!-- Link to reassign task to the same user -->
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-task">No tasks available at the moment.</p>
+        {% endif %}
+
+        <a class="assign-link" href="{% url 'assign_task' %}">Assign New Task</a> <!-- Link to assign a new task -->
+    </div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Task</title>
+    <link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #0056b3;
+        }
+
+        .errors {
+            color: red;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        form {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #004494;
+        }
+        .logout-btn {
+    padding: 10px 20px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    position: fixed;  /* Fix the position */
+    top: 20px;        /* Position from the top of the page */
+    right: 20px;      /* Position from the right edge of the page */
+    z-index: 100;     /* Ensures it stays on top of other content */
+}
+
+.logout-btn:hover {
+    background-color: darkred; /* Hover effect */
+}
+        
+    </style>
+</head>
+<body>
+
+    <!-- Logout Button -->
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+
+    <div class="container">
+        <h2>Assign a Task to {{ user.username }}</h2> <!-- Display the user being assigned a task -->
+
+        <!-- Check for form errors -->
+        {% if form.errors %}
+        <div class="errors">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}  <!-- Render the form fields for assigning task -->
+            
+            <!-- Hidden input to automatically assign the task to the user -->
+            <input type="hidden" name="assigned_to" value="{{ user.id }}">
+
+            <button type="submit">Assign Task</button>
+        </form>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+    <link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h3 {
+            text-align: center;
+            color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        .assign-task-btn {
+            text-decoration: none;
+            padding: 8px 12px;
+            background-color: green;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .assign-task-btn:hover {
+            background-color: darkgreen;
+        }
+
+        .upload-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .upload-btn {
+            padding: 6px 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .upload-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Pagination Styles */
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination a, .pagination span {
+            padding: 8px 12px;
+            margin: 2px;
+            text-decoration: none;
+            background-color: #0056b3;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .pagination a:hover {
+            background-color: #004494;
+        }
+
+        .pagination .current {
+            background-color: gray;
+            color: white;
+            font-weight: bold;
+            cursor: default;
+        }
+
+        /* Floating Logout Button */
+        .logout-btn {
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .logout-btn:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Logout Button -->
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+
+    <div class="container">
+        <h1>Manager Dashboard</h1>
+
+        <!-- Tasks Assigned to Manager by Admin -->
+        <h3>Tasks Assigned to You by Admin</h3>
+        {% if tasks_assigned_to_manager %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task Title</th>
+                        <th>Description</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Upload File</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks_assigned_to_manager %}
+                    <tr>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.description }}</td>
+                        <td>{{ task.due_date|date:"Y-m-d" }}</td>
+                        <td>
+                            {% if task.completed %}
+                                <span style="color: green;">Completed</span>
+                            {% else %}
+                                <span style="color: red;">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not task.completed %}
+                                <form method="POST" action="{% url 'manager_dashboard' %}" enctype="multipart/form-data" class="upload-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="task_id" value="{{ task.id }}">
+                                    <input type="file" name="file_upload" required>
+                                    <button type="submit" class="upload-btn">Upload</button>
+                                </form>
+                            {% else %}
+                                <span style="color: green;">Uploaded</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-tasks">No tasks assigned by admin.</p>
+        {% endif %}
+
+        <!-- Executives Under This Manager -->
+        <h3>Executives Under Your Supervision</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Assign Task</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for executive in executives %}
+                <tr>
+                    <td>{{ executive.user.id }}</td>
+                    <td>{{ executive.user.username }}</td>
+                    <td>{{ executive.user.email }}</td>
+                    <td>
+                        <a href="{% url 'assign_task' executive.user.id %}" class="assign-task-btn">Assign Task</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination Controls -->
+        {% if executives.paginator.num_pages > 1 %}
+            <div class="pagination">
+                {% if executives.has_previous %}
+                    <a href="?page=1">&laquo; First</a>
+                    <a href="?page={{ executives.previous_page_number }}">Previous</a>
+                {% endif %}
+
+                <span class="current">Page {{ executives.number }} of {{ executives.paginator.num_pages }}</span>
+
+                {% if executives.has_next %}
+                    <a href="?page={{ executives.next_page_number }}">Next</a>
+                    <a href="?page={{ executives.paginator.num_pages }}">Last &raquo;</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

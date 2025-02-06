@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            background: url("{% static 'C:\Users\saipr\Desktop\UAM\newwebby\users\static\images\background_loginpage.png' %}") no-repeat center center fixed;
+            background-size: cover; /* Ensures the background image covers the whole page */
+        }
+
+        .task-stack {
+            position: absolute;
+            top: 50%;
+            left: -200px;
+            width: 200px;
+            height: 300px;
+            border-radius: 15px;
+            animation: slideIn 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            transform: translateY(-50%);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        @keyframes slideIn {
+            to {
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(var(--rotate));
+                opacity: 0.3;
+            }
+        }
+
+        .red { 
+            background: #ff6666; 
+            animation-delay: 0s;
+            --rotate: 5deg;
+        }
+        .blue { 
+            background: #6699ff; 
+            animation-delay: 0.3s;
+            --rotate: -3deg;
+        }
+        .green { 
+            background: #66ff99; 
+            animation-delay: 0.6s;
+            --rotate: 2deg;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            opacity: 0;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 2.1s forwards;
+            width: 350px;
+            text-align: center;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        input {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: #6699ff;
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #4d88ff;
+        }
+
+        .messages {
+            margin-top: 1rem;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: #6699ff;
+            text-decoration: none;
+        }
+
+        /* Logo Style */
+        .logo {
+            width: 100px; /* Adjust the width as needed */
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Task Stacks -->
+    <div class="task-stack red"></div>
+    <div class="task-stack blue"></div>
+    <div class="task-stack green"></div>
+
+    <div class="container">
+        <!-- Logo Image -->
+        <img src="https://png.pngtree.com/png-clipart/20220914/original/pngtree-tree-logo-design-with-green-leaves-simple-symbol-icon-illustration-vector-png-image_8617383.png
+        " alt="Logo" class="logo">
+
+        <h2>Login</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p class="{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% endif %}">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <a href="{% url 'register' %}">Don't have an account? Register here</a>
+    </div>
+</body>
+</html>
