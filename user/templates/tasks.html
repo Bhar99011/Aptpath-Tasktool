@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% block extra_css %}
+
+a{
+  text-deocartion:none;
+  color:white
+  }
+{% endblock %}
+
+{% block content %}
+
+        <!-- Task List -->
+<h1>Task Management</h1>
+<div class="container1">
+
+    {% if user.role.name == "Admin" or user.role.name == "Manager" %}
+    <button class="btn-primary" onclick="openAddTaskPanel()">+ Assign Task</button>
+    {% elif user.role.name == "User" %}
+    <button class="btn-primary" onclick="openAddTaskPanel()">+ Assign Task To Yourself</button>
+    {% endif %}
+
+    {% if all_tasks %}
+    <h2>All Tasks</h2>
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Task Title</th>
+                <th>Description</th>
+                <th>Assigned to</th>
+                <th>Assigned By</th>
+                <th>Created At</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            {% for task in all_tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.assigned_to.username }}</td>
+                <td>{{ task.assigned_by.username }}</td>
+                <td>{{ task.created_at|date:"Y-m-d H:i:s" }}</td>  <!-- Format Date & Time -->
+                <td>{{ task.status }}</td>
+
+                <td>
+                    {% if user.role.name == "Admin" or user.role.name == "Manager" %}
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="openEditTaskModal('{{ task.id }}', '{{ task.title }}', '{{ task.description }}', '{{ task.assigned_to.id }}')">Update</button>
+                        <form method="POST" onsubmit="return confirmAction(this.querySelector('button[type=submit]'));">
+                            {% csrf_token %}
+                            <input type="hidden" name="task_id" value="{{ task.id }}">
+                            <button type="submit" name="action" value="delete_task" class="btn-danger">Delete</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <!-- Pagination for All Tasks -->
+    <div class="pagination">
+        {% if all_tasks.has_previous %}
+            <a href="?page=1">First</a>
+            <a href="?page={{ all_tasks.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span>Page {{ all_tasks.number }} of {{ all_tasks.paginator.num_pages }}.</span>
+        {% if all_tasks.has_next %}
+            <a href="?page={{ all_tasks.next_page_number }}">Next</a>
+            <a href="?page={{ all_tasks.paginator.num_pages }}">Last</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<div class="container1">
+    <!-- Tasks Assigned to Me -->
+    <h2>Tasks Assigned to Me</h2>
+    {% if assigned_to_me %}
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Assigned By</th>
+            <th>Status</th>
+            <th>Answer</th>
+        </tr>
+        {% for task in assigned_to_me %}
+        <tr>
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.assigned_by.username }}</td>
+            <td>{{ task.status }}</td>
+            <td>
+                {% if task.status == "Pending" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <textarea name="answer" required></textarea>
+                        <button type="submit" name="action" value="submit_answer">Submit</button>
+                        <input type="hidden" name="task_id" value="{{ task.id }}">
+                    </form>
+                {% else %}
+                    {{ task.answer }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <!-- Pagination for Assigned to Me -->
+    <div class="pagination">
+        {% if assigned_to_me.has_previous %}
+            <a href="?page={{ assigned_to_me.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span>Page {{ assigned_to_me.number }} of {{ assigned_to_me.paginator.num_pages }}.</span>
+        {% if assigned_to_me.has_next %}
+            <a href="?page={{ assigned_to_me.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+    {% else %}
+    <h4>No tasks assigned yet, check back later!</h4>
+    {% endif %}
+</div>
+    <!-- Tasks Assigned by Me -->
+<div class="container1">
+    <h2>Tasks Assigned by Me</h2>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Answer</th>
+        </tr>
+        {% for task in assigned_by_me %}
+        <tr>
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.status }}</td>
+            <td>
+                {% if task.status == "Pending" %}
+                    {% if user.role.name == "User" %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <textarea name="answer" required></textarea>
+                            <button type="submit" name="action" value="submit_answer">Submit</button>
+                            <input type="hidden" name="task_id" value="{{ task.id }}">
+                        </form>
+                    {% else %}
+                        -
+                    {% endif %}
+                {% else %}
+                    {{ task.answer }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Pagination for Assigned by Me -->
+    <div class="pagination">
+        {% if assigned_by_me.has_previous %}
+            <a href="?page={{ assigned_by_me.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span>Page {{ assigned_by_me.number }} of {{ assigned_by_me.paginator.num_pages }}.</span>
+        {% if assigned_by_me.has_next %}
+            <a href="?page={{ assigned_by_me.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+</div>
+<!-- Add Task Modal -->
+<div id="addTaskPanel" class="side-panel">
+    <span class="close-btn" onclick="closeAddTaskPanel()">&times;</span>
+        <h2>Assign Task</h2>
+        <form method="POST" onsubmit="return validateTaskForm('addTaskPanel')">
+            {% csrf_token %}
+            <label>Task Title</label>
+            <input type="text" id="add_task_title" name="title" placeholder="Task Title" required>
+            <label>Description</label>
+            <textarea id="add_description" name="description" placeholder="Task Description" required></textarea>
+            <label>Assign To</label>
+            <select id="add_user_id" name="user_id" required>
+                {% if user.role.name != "User" %}
+                <option value="">Select a User</option>
+                {% for user_obj in users %}
+                <option value="{{ user_obj.id }}">{{ user_obj.username }}</option>
+                {% endfor %}
+                {% else %}
+                <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endif %}
+            </select>
+            <button type="submit" name="action" value="assign_task" class="btn-primary">Assign Task</button>
+        </form>
+    </div>
+
+
+<!-- Edit Task Modal -->
+<div id="editTaskModal" class="editmodal" style="display: none;">
+    <div class="editmodal-content">
+        <h2>Edit Task</h2>
+        <span class="close" onclick="closeEditTaskModal()">&times;</span>
+
+        <form method="POST" onsubmit="return validateTaskForm('editTaskForm')">
+            {% csrf_token %}
+            <input type="hidden" id="edit_task_id" name="task_id">
+
+            <label for="edit_task_title">Task Title:</label>
+            <input type="text" id="edit_task_title" name="title" required>
+
+            <label for="edit_description">Description:</label>
+            <textarea id="edit_description" name="description" required></textarea>
+
+            <label for="edit_assigned_to">Assign To:</label>
+            <select id="edit_assigned_to" name="assigned_to">
+                {% for user in users %}
+                <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" name="action" value="update_task" class="btn-primary">Update Task</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

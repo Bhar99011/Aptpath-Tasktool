@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+        <h1>Welcome to {{ user.role.name }} Dashboard, {{ user.username }}!</h1>
+
+        <div class="details">
+        <h2>Your details</h2>
+        <p><strong>Role:</strong> {{ user.role.name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        </div>
+        <div class="details">
+        <h2>Your Responsibilities</h2>
+        <p>{{ responsibilities }}</p>
+
+        {% if user.role.name == 'Admin' %}
+            <h3>Admin Actions</h3>
+            <ul>
+                <li><p>View all users and their details.</p></li>
+                <li><p>Manage users and their details.</p></li>
+                <li><p>View all the tasks assigned to users.</p></li>
+                <li><p>Assign new tasks to users.</p></li>
+                <li><p>Edit the assigned tasks as per requirement.</p></li>
+            </ul>
+        {% elif user.role.name == 'Manager' %}
+            <h3>Manager Actions</h3>
+            <ul>
+                <li><p>Manage users and their details.</p></li>
+                <li><p>View all the tasks assigned to users.</p></li>
+                <li><p>Edit the assigned taska as per requirement.</p></li>
+            </ul>
+        {% else %}
+            <h3>User Actions</h3>
+            <ul>
+                <li><p>View and update your personal details.</p></li>
+                <li><p>View tasks and submit responses</p></li>
+            </ul>
+        {% endif %}
+        </div>
+
+{% endblock %}

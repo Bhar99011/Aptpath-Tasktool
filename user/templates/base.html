@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <script>
+        function confirmAction(button) {
+            const action = button.value;
+            if (action === 'update_task') {
+                return confirm("Are you sure you want to update this task?");
+            } else if (action === 'delete_task') {
+                return confirm("Are you sure you want to delete this task?");
+            } else if (action === 'delete_user') {
+                return confirm("Are you sure you want to delete this user?");
+            } else {
+                alert('Invalid action!');
+                return false;
+            }
+        }
+        function openAddUserForm() {
+            document.getElementById("addUserForm").style.right = "-180px";  // Fully visible
+        }
+
+        function closeAddUserForm() {
+            document.getElementById("addUserForm").style.right = "-600px"; // Fully hidden
+        }
+
+        function validateAddUserForm() {
+            let username = document.getElementById("new_username").value;
+            let email = document.getElementById("new_email").value;
+            let password = document.getElementById("new_password").value;
+
+            if (!username || !email || !password) {
+                alert("All fields are required!");
+                return false;
+            }
+            return confirm("Are you sure you want to create this user?");
+        }
+
+
+
+        function openEditModal(username, email, role) {
+            let modal = document.getElementById("editModal");
+            if (modal) {
+                document.getElementById("edit_username").value = username;
+                document.getElementById("edit_email").value = email;
+                document.getElementById("edit_role").value = role;
+                modal.style.display = "flex"; // Show modal only when triggered
+            }
+        }
+
+
+
+        function closeEditModal() {
+            let modal = document.getElementById("editModal");
+            if (modal) {
+                modal.style.display = "none"; // Hide modal
+            }
+        }
+
+        function confirmDelete(id) {
+            document.getElementById("delete_user_id").value = id;
+            document.getElementById("deleteConfirm").style.display = "block"; // Show modal
+        }
+
+        function closeDeleteConfirm() {
+            document.getElementById("deleteConfirm").style.display = "none";
+        }
+
+
+        setTimeout(() => { document.getElementById("successPopup").style.display = "none"; }, 2000);
+
+        function showAlert(message, type) {
+        let alertBox = document.getElementById("alertBox");
+        let alertMessage = document.getElementById("alertMessage");
+
+        alertMessage.innerText = message;
+        alertBox.style.display = "block";
+
+        // Apply color based on type (Success: Green, Error: Red)
+        if (type === "success") {
+            alertBox.style.backgroundColor = "green";
+        } else if (type === "error") {
+            alertBox.style.backgroundColor = "red";
+        }
+
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+            alertBox.style.display = "none";
+        }, 3000);
+        }
+
+         function openAddTaskPanel() {
+            let panel = document.getElementById("addTaskPanel");
+            if (panel) {
+                panel.style.right = "-180px";  // Make the panel fully visible
+            }
+        }
+
+        function closeAddTaskPanel() {
+            let panel = document.getElementById("addTaskPanel");
+            if (panel) {
+                panel.style.right = "-600px";  // Hide the panel
+            }
+        }
+
+        function openEditTaskModal(taskId, title, description, assignedTo) {
+            let modal = document.getElementById("editTaskModal");
+            if (modal) {
+                document.getElementById("edit_task_id").value = taskId;
+                document.getElementById("edit_task_title").value = title;
+                document.getElementById("edit_description").value = description;
+                document.getElementById("edit_assigned_to").value = assignedTo;
+                modal.style.display = "flex";                }
+        }
+
+        function closeEditTaskModal() {
+            let modal = document.getElementById("editTaskModal");
+            if (modal) {
+                modal.style.display = "none";                }
+        }
+
+
+
+        function validateTaskForm(formType) {
+            let title, description, assignedTo;
+
+            if (formType === "addTaskPanel") {
+                title = document.getElementById("add_task_title").value.trim();
+                description = document.getElementById("add_description").value.trim();
+                assignedTo = document.getElementById("add_user_id").value;
+            } else {
+                title = document.getElementById("edit_task_title").value.trim();
+                description = document.getElementById("edit_description").value.trim();
+                assignedTo = document.getElementById("edit_assigned_to").value;
+            }
+
+            if (title === "" || description === "" || assignedTo === "") {
+                alert("All fields are required!");
+                return false;
+            }
+            return true;
+        }
+
+        // Check for messages in Django context
+        document.addEventListener("DOMContentLoaded", function() {
+              {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == "success" %}
+                        showAlert("{{ message }}", "success");
+                    {% else %}
+                        showAlert("{{ message }}", "error");
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            closeEditModal();
+        });
+
+    </script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('https://tinyurl.com/58kkzt82') no-repeat center center fixed;
+            background-size: cover;
+            color: #e0e0e0;
+            margin: 0px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        html, body {
+            overflow-x: hidden; /* Prevents horizontal scrolling */
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        /* Headings */
+        h1, h2, h3, h4 {
+            text-align: center;
+            color: black;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+        }
+
+        /* Container Box */
+        .container {
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            color: white;
+            max-width: 1200px;
+            margin-top: 120px;
+            margin: 100px auto;
+            width: 90%;
+
+        }
+        .container1 {
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            color: white;
+            max-width: 1200px;
+            margin: 50px auto;
+            width: 90%;
+        }
+
+        /* Table Container */
+        .table-container {
+            width: 100%;
+            overflow-x: auto; /* Enables horizontal scrolling for small screens */
+            padding: 10px;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            color: #333;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Table Header */
+        th {
+            background-color: #007bff; /* Professional blue header */
+            color: #fff;
+            padding: 14px;
+            text-align: left;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Table Rows */
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd; /* Soft separation */
+            color: #333;
+        }
+
+        /* Alternating Row Colors for Better Readability */
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Hover Effect for Rows */
+        tr:hover {
+            background-color: #eaf3ff; /* Light blue hover effect */
+            transition: 0.3s;
+        }
+
+        /* Button Group Alignment */
+        td .button-group {
+            display: flex;
+            gap: 10px; /* Space between buttons */
+        }
+
+
+<!--        /* Table Styles */-->
+<!--        table {-->
+<!--            width: 100%;-->
+<!--            border: 1px solid #444;-->
+<!--            border-collapse: collapse;-->
+<!--            background: white;-->
+<!--            color: black;-->
+<!--        }-->
+<!--        .table-container {-->
+<!--            width: 100%;-->
+<!--            overflow-x: auto;-->
+<!--        }-->
+
+<!--        th, td {-->
+<!--            border: 1px solid #444;-->
+<!--            padding: 12px;-->
+<!--            text-align: left;-->
+<!--        }-->
+
+<!--        th {-->
+<!--            background-color: #333;-->
+<!--            color: #f5f5f5;-->
+<!--        }-->
+
+<!--        td {-->
+<!--            color: black;-->
+<!--        }-->
+
+<!--        /* Button Group Alignment */-->
+<!--        td .button-group {-->
+<!--            display: flex;-->
+<!--            gap: 10px; /* Space between buttons */-->
+<!--        }-->
+
+        /* Button Styles */
+        button, .btn-primary, .btn-danger {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* Primary Button */
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        /* Danger Button */
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #a71d2a;
+            transform: scale(1.05);
+        }
+        .alert-box {
+            position: fixed;
+            top: 80px; /* Below navbar */
+            right: 20px;
+            background-color: green; /* Default to success */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+  /* Floating "Add Task" Button */
+        .add-task-btn {
+            display: block !important;
+            position: fixed;
+            left
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            z-index: 9999;
+        }
+        /* Modal Styling */
+        .modal {
+            display: none; /* Hide modal by default */
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            width: 90%;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 450px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #ff4d4d;
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
+        }
+        .close:hover {
+            color: #d32f2f;
+        }
+        .btn-secondary {
+            background-color: gray;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        /* Success Popup */
+        .success-popup {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: green;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 80%;
+            }
+
+            .text-end {
+                text-align: center;
+            }
+        }
+        /* 🔹 Edit Modal Overlay */
+        .editmodal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Dark transparent background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1050;
+        }
+        /* 🔹 Edit Modal Content */
+        .editmodal-content {
+            background: #fff;
+            width: 90%;
+            max-width: 450px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        /* 🔹 Close Button */
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #ff4d4d;
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
+        }
+        .close:hover {
+            color: #d32f2f;
+        }
+        /* 🔹 Form Elements */
+        .editmodal-content label {
+            display: block;
+            text-align: left;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .editmodal-content input,
+        .editmodal-content select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius:0 5px;
+            font-size: 14px;
+            background: #f9f9f9;
+        }
+        /* 🔹 Submit Button */
+        .editmodal-content .btn-primary {
+            width: 50%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+            align: left
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+        .editmodal-content .btn-primary:hover {
+            background: #0056b3;
+        }
+        /* 🔹 Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        /* 🔹 Responsive Design */
+        @media (max-width: 500px) {
+            .editmodal-content {
+                width: 95%;
+                max-width: 380px;
+            }
+        }
+        /* Side Panel for Adding User */
+        .side-panel {
+            position: fixed;
+            top: 60px;
+            right: -600px; /* Fully hidden */
+            width: 400px;
+            height: 600px;
+            background: rgba(15, 15, 15, 0.95);
+            color: #fff;
+            padding: 30px;
+            box-shadow: -4px 0 15px rgba(0, 0, 0, 0.5);
+            transition: right 0.4s ease-in-out;
+            z-index: 1050;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 26px;
+            background: none;
+            border: none;
+            color: #ff4d4d;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: #ff1a1a;
+        }
+        /* Form Styling */
+        .side-panel form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .side-panel label {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        /* Input Fields */
+        .side-panel input,
+        .side-panel select {
+            padding: 12px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid #555;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .side-panel input:focus,
+        .side-panel select:focus {
+            background: rgba(15, 15, 15, 0.95);
+            border-color: #007bff;
+        }
+        /* Submit Button */
+        .side-panel .btn-primary {
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background: #007bff;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+        .side-panel .btn-primary:hover {
+            background: #0056b3;
+        }
+
+         /* Pagination Styling */
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        span {
+                color: #007bff;
+                font-weight: bold;
+            }
+        .pagination a {
+            padding: 5px 8px;
+            margin: 3px;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+        .pagination a:hover {
+            background: #0056b3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .side-panel {
+                width: 100%;
+                right: 0%;
+            }
+        }
+}
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div id="alertBox" class="alert-box" style="display: none;">
+        <p id="alertMessage"></p>
+    </div>
+
+    <div class="container">
+
+<!--        {% block messages %}-->
+<!--            {% if messages %}-->
+<!--                <div class="messages">-->
+<!--                    {% for message in messages %}-->
+<!--                        <div class="alert {{ message.tags }}">-->
+<!--                            {{ message }}-->
+<!--                        </div>-->
+<!--                    {% endfor %}-->
+<!--                </div>-->
+<!--            {% endif %}-->
+<!--        {% endblock %}-->
+        {% block content %}
+        <!-- Content goes here -->
+
+        {% endblock %}
+    </div>
+    <!-- Edit User Modal -->
+
+
+    <div id="editModal" class="editmodal" >
+        <div class="editmodal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Edit User</h2>
+            <form id="updateForm" method="POST" onsubmit="return confirm('Are you sure you want to update this user?')">
+                {% csrf_token %}
+                <label>Username:</label>
+                <input type="text" id="edit_username" name="username" readonly>
+
+                <label>Email:</label>
+                <input type="email" name="email" id="edit_email">
+
+                <label>Role:</label>
+                <select name="role" id="edit_role">
+                    {% for role in roles %}
+                    <option value="{{ role.name }}">{{ role.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" name="action" value="update_user" class="btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -27,6 +27,13 @@ class Task(models.Model):
     description = models.TextField()
     assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks')
     assigned_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assigned_tasks')
+    created_at = models.DateTimeField(auto_now_add=True)  # Add Timestamp
+    status = models.CharField(
+        max_length=10,
+        choices=[("Pending", "Pending"), ("Submitted", "Submitted")],
+        default="Pending"
+    )
+    answer = models.TextField(blank=True, null=True)  # Answer submission field
 
     def __str__(self):
         return self.title
