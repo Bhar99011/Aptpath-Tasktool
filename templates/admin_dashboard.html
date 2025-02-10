@@ -31,6 +31,11 @@
     <!-- User Details Section -->
     <div class="admin-section">
         <h2>User Details</h2>
+        <form method="GET">
+           
+            <input type="search" class="search-box" name="search" value="{{search_query}}" placeholder="search user name ..">
+            <button type="submit" class="button-css">Search</button>
+        </form><br>
         <table class="admin-user-table">
             <thead>
                 <tr>
@@ -56,20 +61,20 @@
                         
                             <form method="POST" action="{% url 'update_role' user.id %}">
                                 {% csrf_token %}
-                                <select name="role" >
+                                <select name="role" style="inline-size: 102px;" >
                                     <option value="admin" {% if user.role == "admin" %} selected {% endif %}>Admin</option>
                                     <option value="user" {% if user.role == "user" %} selected {% endif %}>User</option>
                                     <option value="manager"{% if user.role == "manager" %} selected {% endif %} >Manager</option>
                                     
                                 </select>
-                                <button type="submit">Update</button>
+                                <button type="submit" class="button-css" style="margin-left: 0.1rem;">Update</button>
                             </form>
                         </td>
                         <td>
                             <div class="admin-action-buttons">
                                 <!-- Edit Button -->
                             
-                                <a href="#popup{{ user.id }}" class="edit-button">Edit</a>
+                                <a href="#popup{{ user.id }}" ><button class="edit-button" >Edit</button></a>
                         
                                 {% include "edit_user.html" %}
                         
@@ -122,7 +127,7 @@
             <input type="password" id="password" name="password" required><br><br>
             <label for="password">Confirm Password:</label><br>
             <input type="password" id="password" name="confirm_password" required><br><br>
-            <button type="submit">Create User</button>
+            <button type="submit" class="button-css">Create User</button>
         </form>
     </div>
 

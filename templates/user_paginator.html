@@ -45,15 +45,15 @@
 
 <div class="paginator">
     {% if user_info.has_previous %} 
-    <a href="?page=1" class="btn btn-outline-primary">First</a>
-    <a href="?page={{user_info.previous_page_number}}" class="btn btn-outline-primary">Previous</a>
+    <a href="?page=1 {% if search_query %}&search={{search_query}}{% endif %}" class="btn btn-outline-primary">First</a>
+    <a href="?page={{user_info.previous_page_number}} {% if search_query %}&search={{search_query}}{% endif %}" class="btn btn-outline-primary">Previous</a>
     {% endif %}
     
     <span class="badge bg-secondary">{{user_info.number}} of {{user_info.paginator.num_pages}}</span>
  
     {% if user_info.has_next %}
-    <a href="?page={{user_info.next_page_number}}" class="btn btn-outline-primary">Next</a>
-    <a href="?page={{user_info.paginator.num_pages}}" class="btn btn-outline-primary">Last</a>
+    <a href="?page={{user_info.next_page_number}} {% if search_query %}&search={{search_query}} {% endif %}" class="btn btn-outline-primary">Next</a>
+    <a href="?page={{user_info.paginator.num_pages}}{% if search_query %}&search={{search_query}} {% endif %}" class="btn btn-outline-primary">Last</a>
     {% endif %}
  </div>
  

@@ -65,8 +65,12 @@ def dashboard(request, user_id):
         messages.error(request, "Unauthorized access.")
         return redirect("login")
 
-    user = users_details.objects.filter(id=user_id).first()    
-    tasks = Tasks.objects.filter(Q(assigned_to=user)| Q(assigned_by=user)).order_by("-created_at")
+    user = users_details.objects.filter(id=user_id).first()
+    search=request.GET.get("search","").strip()
+    if search:
+        tasks=Tasks.objects.filter(title__icontains=search,assigned_to=user).order_by("-created_at") 
+    else: 
+        tasks = Tasks.objects.filter(assigned_to=user).order_by("-created_at")
     p=Paginator(tasks,2)
     page=request.GET.get("page")
     tasks=p.get_page(page)
@@ -79,7 +83,8 @@ def dashboard(request, user_id):
         'user_name': user.user_name,
         'role': user.role,
         "tasks":tasks,
-        "users":users
+        "users":users,
+        "search_query":search,
     }
 
     if request.method == "POST":   
@@ -139,8 +144,14 @@ def admin_dashboard(request, user_id):
     if not user:
         messages.error(request, "User not found.")
         return redirect("login")
-    user_info=users_details.objects.all()
-    p = Paginator(user_info, 4)  # Show 10 objects per page
+    
+    search=request.GET.get("search","").strip()
+    print(search)
+    if search:
+        user_info=users_details.objects.filter(user_name__icontains=search)
+    else:
+        user_info=users_details.objects.all()
+    p = Paginator(user_info, 2)  # Show 10 objects per page
     page_number = request.GET.get("page")    
     user_info =p.get_page(page_number) 
 
@@ -157,6 +168,7 @@ def admin_dashboard(request, user_id):
         "user_count":user_count,
         "task_count":task_count,
         "manager_count":manager_count,
+        "search_query":search,
     }
     return render(request, "admin_dashboard.html", context)
     
@@ -175,7 +187,12 @@ def manager_dashboard(request, user_id):
     if not user:
         messages.error(request, "User not found.")
         return redirect("login")
-    user_list = users_details.objects.filter(role="user")
+    
+    search=request.GET.get("search","").strip()
+    if search:
+        user_list=users_details.objects.filter(user_name__icontains=search,role="user")
+    else:
+        user_list = users_details.objects.filter(role="user")
     p=Paginator(user_list,2)
     page=request.GET.get("page")
     user_list=p.get_page(page)
@@ -190,6 +207,7 @@ def manager_dashboard(request, user_id):
         "user_id":user_id,
         "user_count":user_count,
         "task_count":tasks_count,
+        "search_query":search,
     }
 
     return render(request, "manager_dashboard.html", context)
@@ -314,7 +332,12 @@ def tasks(request,user_id):
 
 
     users=users_details.objects.all()
-    tasks=Tasks.objects.all().order_by("-created_at")
+
+    search=request.GET.get("search","").strip()
+    if search:
+        tasks=Tasks.objects.filter(title__icontains=search).order_by("-created_at")
+    else:
+        tasks=Tasks.objects.all().order_by("-created_at")
     p=Paginator(tasks,2)
     page=request.GET.get("page")
     tasks=p.get_page(page)
@@ -326,6 +349,7 @@ def tasks(request,user_id):
             'user_name': session_user.user_name,
             'role': session_user.role,
             "dashboard_url": dashboard_url,  # Pass the dashboard URL to the template
+            "search_query":search,
         }
 
     if request.method == "POST":   

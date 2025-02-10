@@ -54,21 +54,23 @@ body {
     background-color: #dff0d8;
     border-color: #d6e9c6;
 }
-button {
-    padding: 10px 20px;
-    background-color: hwb(240 14% 3%);
+.button-css {
+    padding: 10px;
+    background-color: #270dd1;
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+
 }
-button:hover {
+.button-css:hover {
     background-color: hwb(238 38% 3%);
 }
 
 .edit-button {
-    padding: 10px 28px;
+    padding: 10px 20px;
+    inline-size: 90px;
     background-color: #270dd1;
     color: white;
     border: none;
@@ -109,6 +111,7 @@ button:hover {
 .admin-user-table th {
     background-color: #007bff;
     color: white;
+    
 }
 /* button {
     padding: 10px 20px;
@@ -200,7 +203,9 @@ margin: 20px auto;
 }
 
 .task-button{
-background-color: #14d484;padding: 10px 20px; border: black;
+background-color: #14d484;
+padding: 10px 20px; 
+border: black;
    border-radius: 10px;
    font-size: 20px;
    cursor: pointer;
@@ -352,4 +357,25 @@ newdashboard */
     gap: 10px; /* Space between buttons */
     inline-size: 10px;
     background-color: #14d484;
+}
+
+.search-box{
+    padding: 10px;
+    color: black;
+    font-size: 16px;
+    margin-left: 65%;    
+    width: 250px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+    
+
+}
+
+/* Search Box Focus */
+.search-box:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 8px rgba(0, 91, 187, 0.5);
 }

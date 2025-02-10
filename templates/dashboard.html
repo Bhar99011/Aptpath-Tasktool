@@ -48,7 +48,13 @@
         font-weight: bold;
         font-family: Georgia, 'Times New Roman', Times, serif;">
         <h3>Tasks</h3>
-        </span><hr>
+        </span>
+        <form method="GET">
+           
+            <input type="search" class="search-box" name="search" value="{{search_query}}" placeholder="search Task title ..">
+            <button type="submit" class="button-css">Search</button>
+        </form>       
+        <hr>
         <!-- Task List (Card-Based) -->
         <div class="task-container">
            
@@ -71,7 +77,7 @@
                         <label for="answer-{{ task.id }}" class="form-label"><strong>Submit Your Answer:</strong></label>
                         <textarea class="form-control" id="answer-{{ task.id }}" name="answer" placeholder="Write your answer here..." required></textarea>
                     </div>
-                    <button type="submit">Submit Task</button>
+                    <button type="submit" class="button-css">Submit Task</button>
                 </form>
                 {% else %}
                 <h3>Task Already Submitted </h3>
@@ -93,7 +99,7 @@
         
 
 <!-- Task Form -->
-<div class="form-container">
+<!-- <hr><div class="form-container">
     <h3>Create Task</h3>
     <form method="POST" >
         {% csrf_token %}
@@ -121,7 +127,7 @@
         
         <button type="submit" class="btn btn-primary w-100">Create Task</button>
     </form>
-</div>
+</div> -->
 
 <!-- old dashboard -->
 

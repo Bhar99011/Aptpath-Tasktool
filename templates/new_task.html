@@ -12,7 +12,11 @@
 
     <div class="container">
         <h1 class="dashboard-title">Task Management</h1>
-
+        <form method="GET">
+           
+            <input type="search" class="search-box" name="search" value="{{search_query}}" placeholder="search Task title ..">
+            <button type="submit" class="button-css">Search</button>
+        </form><hr><br>
         
         <!-- Task List (Card-Based) -->
         <div class="task-container">
@@ -32,7 +36,7 @@
                         <br>
                         <div class="task-info">
                             <div class="task-action" >                     
-                               <a  href="#popup{{ task.id }}" name="select" ><button class="edit-button">Edit</button></a>
+                               <a  href="#popup{{ task.id }}" name="select" style="background-color: aliceblue;" ><button class="edit-button">Edit</button></a>
                                 {% include "task_edit.html" %}                                                  
 
                                 <form  action="{% url 'task_action' task.id %}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this Task ?');">

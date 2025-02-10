@@ -46,14 +46,14 @@
 <div class="paginator">
 
     {% if tasks.has_previous %}
-    <a href="?page=1" class="btn btn-outline-primary">First</a>
-    <a href="?page={{tasks.previous_page_number}}" class="btn btn-outline-primary" >Previous</a>
+    <a href="?page=1 {% if search_query %}&search={{search_query}} {% endif %}" class="btn btn-outline-primary">First</a>
+    <a href="?page={{tasks.previous_page_number}} {% if search_query %}&search={{search_query}} {% endif %}" class="btn btn-outline-primary" >Previous</a>
     {% endif %}
 
     <span> {{tasks.number}} of {{tasks.paginator.num_pages}}</span>
 
     {% if tasks.has_next %}
-    <a href="?page={{tasks.next_page_number}}" class="btn btn-outline-primary" >Next</a>
-    <a href="?page={{tasks.paginator.num_pages}}" class="btn btn-outline-primary" >Last</a>
+    <a href="?page={{tasks.next_page_number}} {% if search_query %}&search={{search_query}} {% endif %}" class="btn btn-outline-primary" >Next</a>
+    <a href="?page={{tasks.paginator.num_pages}} {% if search_query %}&search={{search_query}} {% endif %}" class="btn btn-outline-primary" >Last</a>
     {% endif %}
 </div>

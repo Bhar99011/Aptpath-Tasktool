@@ -24,6 +24,11 @@
     <!-- User Details Section -->
     <div class="admin-section">
         <h2>User Details</h2>
+        <form method="GET">
+           
+            <input type="search" class="search-box" name="search" value="{{search_query}}" placeholder="search user name ..">
+            <button type="submit" class="button-css">Search</button>
+        </form><br>
         <table class="admin-user-table">
             <thead>
                 <tr>
@@ -49,7 +54,7 @@
                             <!-- <form action="{% url 'user_edit' user.id %}">
                                 
                                 
-                                <button type="submit">Edit </button>
+                                <button type="submit" class="button-css">Edit </button>
                             </form> -->
 
 
@@ -106,7 +111,7 @@
         <input type="password" id="password" name="password" required><br><br>
         <label for="password">Confirm Password:</label><br>
         <input type="password" id="password" name="confirm_password" required><br><br>
-        <button type="submit">Create User</button>
+        <button type="submit" class="button-css">Create User</button>
     </form>
 </div>
 
